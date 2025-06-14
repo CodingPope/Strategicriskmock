@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+Create a `.env.local` file based on `.env.example` to configure the risk feed URL.
+
 First, run the development server:
 
 ```bash
