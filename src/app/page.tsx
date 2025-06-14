@@ -1,3 +1,4 @@
+'use client';
 import RiskSummary from '../components/RiskSummary';
 import Exposures from '../components/Exposures';
 

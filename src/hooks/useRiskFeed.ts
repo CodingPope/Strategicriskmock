@@ -12,10 +12,8 @@ export const useRiskFeed = () => {
   const pendingData = useRef<RiskTick[]>([]);
 
   useEffect(() => {
-    const socket = io('http://localhost:4000', {
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-    });
+    const socket = io(process.env.NEXT_PUBLIC_FEED_URL!); // ← new
+
     socketRef.current = socket;
 
     socket.on('connect', () => {

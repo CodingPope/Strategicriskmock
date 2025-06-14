@@ -1,17 +1,40 @@
-import { useRiskFeed } from '../hooks/useRiskFeed';
+/* src/components/RiskSummary.tsx */
+'use client';
+import { useRiskFeed } from '@/hooks/useRiskFeed';
+import { LineChart, Line, ResponsiveContainer } from 'recharts';
+
 export default function RiskSummary() {
-  const { data: feed, loading } = useRiskFeed();
-  const latest = feed[feed.length - 1];
-  if (loading) return <div>Loading...</div>;
+  const feed = useRiskFeed();
+  const latest = feed.data.at(-1);
   if (!latest) return null;
-  const color = latest.pnl >= 0 ? 'text-emerald-400' : 'text-rose-400';
+
+  const isGain = latest.pnl >= 0;
+  const color = isGain ? '#34d399' : '#f43f5e';
+
   return (
-    <div className='p-6 rounded-xl bg-zinc-800'>
-      <h2 className='text-sm text-zinc-400 uppercase'>P&L</h2>
-      <p className={`text-5xl font-bold ${color}`}>
+    <div className='rounded-xl bg-zinc-800 p-6 h-full'>
+      <h2 className='text-sm uppercase text-zinc-400 mb-2'>P&L</h2>
+      <p
+        className={`text-5xl font-bold mb-4 ${
+          isGain ? 'text-emerald-400' : 'text-rose-400'
+        }`}
+      >
         {latest.pnl.toLocaleString()}
       </p>
-      {/* TODO sparkline */}
+
+      {/* 60-point rolling sparkline */}
+      <ResponsiveContainer width='100%' height={60}>
+        <LineChart data={feed.data.slice(-60)}>
+          <Line
+            type='monotone'
+            dataKey='pnl'
+            stroke={color}
+            strokeWidth={2}
+            dot={false}
+            isAnimationActive={false} /* traders hate jitter */
+          />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
   );
 }
