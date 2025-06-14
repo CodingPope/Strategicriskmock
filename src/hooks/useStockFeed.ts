@@ -15,7 +15,7 @@ export function useStockFeed(symbols: string[]) {
     let mounted = true;
 
     async function fetchAll() {
-      const key = process.env.NEXT_PUBLIC_FINNHUB_API_KEY!;
+      const key = process.env.NEXT_PUBLIC_FINNHUB_API_KEY;
       const results = await Promise.all(
         symbols.map((sym) =>
           fetch(`https://finnhub.io/api/v1/quote?symbol=${sym}&token=${key}`)
