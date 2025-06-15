@@ -67,9 +67,13 @@ export default function Exposures({ portfolio }: Props) {
   });
 
   return (
-    <div className='rounded-xl bg-zinc-800 p-4 overflow-auto'>
+    <div className='rounded-xl bg-zinc-800 p-4 overflow-auto min-w-0'>
       <div className='min-w-[24rem]'>
-        <table role='grid' className='min-w-full text-sm'>
+        <table
+          role='grid'
+          aria-label='Current exposures'
+          className='min-w-full text-sm'
+        >
           <thead className='text-zinc-400'>
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id} className='border-b border-zinc-700/60'>
@@ -79,6 +83,13 @@ export default function Exposures({ portfolio }: Props) {
                     <th
                       key={h.id}
                       scope='col'
+                      aria-sort={
+                        h.column.getIsSorted() === 'asc'
+                          ? 'ascending'
+                          : h.column.getIsSorted() === 'desc'
+                          ? 'descending'
+                          : 'none'
+                      }
                       className='px-2 py-1 text-left cursor-pointer select-none'
                       onClick={h.column.getToggleSortingHandler()}
                     >

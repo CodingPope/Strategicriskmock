@@ -19,8 +19,15 @@ export default function StressTest({ portfolio }: Props) {
   const data: StressTestValues[] = useStressTests(portfolio);
 
   return (
-    <div className='rounded-xl bg-zinc-800 p-6 min-h-64 pt-4'>
-      <h2 className='text-sm text-zinc-400 mb-2'>Stress Scenarios</h2>
+    <section
+      role='region'
+      aria-labelledby='stress-test-heading'
+      className='rounded-xl bg-zinc-800 p-6 min-w-0'
+    >
+      {/* visible heading, used for aria-labelledby */}
+      <h2 id='stress-test-heading' className='text-sm text-zinc-400'>
+        Stress Scenarios
+      </h2>
       <div className='h-56 pt-2 pb-2'>
         <ResponsiveContainer width='100%' height='100%'>
           <BarChart
@@ -37,6 +44,7 @@ export default function StressTest({ portfolio }: Props) {
               tickLine={false}
               tick={{ fill: '#aaa', dy: -20 }}
               width={120}
+              interval={0}
               tickMargin={20}
               padding={{ top: 20, bottom: 20 }}
             />
@@ -53,10 +61,10 @@ export default function StressTest({ portfolio }: Props) {
                 position='right'
                 formatter={(v: number) => v.toLocaleString()}
               />
-            </Bar>{' '}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
-    </div>
+    </section>
   );
 }
