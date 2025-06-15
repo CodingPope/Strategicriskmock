@@ -1,44 +1,44 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
-export type Quote = {
+export interface Quote {
   c: number; // current price
-  d: number; // high price
-  dp: number; // low price
-  t: number; // open price
-};
+  d: number; // absolute change
+  dp: number; // percent change
+  t: number; // timestamp
+}
 
-export function useStockFeed(symbols: string[]) {
+export function useStockFeed(symbols: string[]): Record<string, Quote> {
+  // initialize an empty map of quotes
   const [quotes, setQuotes] = useState<Record<string, Quote>>({});
 
   useEffect(() => {
-    let mounted = true;
+    let alive = true;
+    const key = process.env.NEXT_PUBLIC_FINNHUB_API_KEY!;
 
-    async function fetchAll() {
-      const key = process.env.NEXT_PUBLIC_FINNHUB_API_KEY;
-      const results = await Promise.all(
-        symbols.map((sym) =>
-          fetch(`https://finnhub.io/api/v1/quote?symbol=${sym}&token=${key}`)
-            .then((r) => r.json() as Promise<Quote>)
-            .then((q) => ({ sym, q }))
-        )
+    async function fetchQuotes() {
+      const entries = await Promise.all(
+        symbols.map(async (sym) => {
+          const res = await fetch(
+            `https://finnhub.io/api/v1/quote?symbol=${sym}&token=${key}`
+          );
+          const q = (await res.json()) as Quote;
+          return [sym, q] as const;
+        })
       );
-      if (!mounted) return;
-      setQuotes((qs) => {
-        const copy = { ...qs };
-        for (const { sym, q } of results) copy[sym] = q;
-        return copy;
-      });
+
+      if (!alive) return;
+      // turn [[sym, quote], ...] into { sym: quote, ... }
+      setQuotes(Object.fromEntries(entries));
     }
 
-    // initial fetch + interval
-    fetchAll();
-    const iv = setInterval(fetchAll, 5000);
+    fetchQuotes();
+    const iv = setInterval(fetchQuotes, 5000);
     return () => {
-      mounted = false;
+      alive = false;
       clearInterval(iv);
     };
   }, [symbols.join(',')]);
 
-  return quotes; // object keyed by symbol
+  return quotes;
 }

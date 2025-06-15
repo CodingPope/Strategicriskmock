@@ -11,7 +11,7 @@ export default function RiskSummary() {
   // 2) Early return on load
   if (loading || riskTicks.length === 0) {
     return (
-      <div className='rounded-xl bg-zinc-800 p-6'>
+      <div className='rounded-xl bg-zinc-800 p-6 min-w-0 …'>
         <div className='text-zinc-400'>Loading risk data…</div>
       </div>
     );

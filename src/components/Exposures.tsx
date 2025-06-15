@@ -68,52 +68,54 @@ export default function Exposures({ portfolio }: Props) {
 
   return (
     <div className='rounded-xl bg-zinc-800 p-4 overflow-auto'>
-      <table role='grid' className='min-w-full text-sm'>
-        <thead className='text-zinc-400'>
-          {table.getHeaderGroups().map((hg) => (
-            <tr key={hg.id} className='border-b border-zinc-700/60'>
-              {hg.headers.map((h) => {
-                const sort = h.column.getIsSorted();
-                return (
-                  <th
-                    key={h.id}
-                    scope='col'
-                    className='px-2 py-1 text-left cursor-pointer select-none'
-                    onClick={h.column.getToggleSortingHandler()}
-                  >
-                    <div className='flex items-center gap-1'>
-                      {flexRender(h.column.columnDef.header, h.getContext())}
-                      {sort === 'asc' && ' ▲'}
-                      {sort === 'desc' && ' ▼'}
-                    </div>
-                  </th>
-                );
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className='hover:bg-zinc-700/40'>
-              {row.getVisibleCells().map((cell) => {
-                const CellRenderer = cell.column.columnDef.cell;
-                const value = cell.getValue();
-                return (
-                  <td
-                    key={cell.id}
-                    tabIndex={0}
-                    className='px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-cyan-400'
-                  >
-                    {CellRenderer
-                      ? flexRender(CellRenderer, cell.getContext())
-                      : String(value)}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className='min-w-[24rem]'>
+        <table role='grid' className='min-w-full text-sm'>
+          <thead className='text-zinc-400'>
+            {table.getHeaderGroups().map((hg) => (
+              <tr key={hg.id} className='border-b border-zinc-700/60'>
+                {hg.headers.map((h) => {
+                  const sort = h.column.getIsSorted();
+                  return (
+                    <th
+                      key={h.id}
+                      scope='col'
+                      className='px-2 py-1 text-left cursor-pointer select-none'
+                      onClick={h.column.getToggleSortingHandler()}
+                    >
+                      <div className='flex items-center gap-1'>
+                        {flexRender(h.column.columnDef.header, h.getContext())}
+                        {sort === 'asc' && ' ▲'}
+                        {sort === 'desc' && ' ▼'}
+                      </div>
+                    </th>
+                  );
+                })}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id} className='hover:bg-zinc-700/40'>
+                {row.getVisibleCells().map((cell) => {
+                  const CellRenderer = cell.column.columnDef.cell;
+                  const value = cell.getValue();
+                  return (
+                    <td
+                      key={cell.id}
+                      tabIndex={0}
+                      className='px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-cyan-400'
+                    >
+                      {CellRenderer
+                        ? flexRender(CellRenderer, cell.getContext())
+                        : String(value)}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -1,29 +1,27 @@
 'use client';
 
-import { useStockFeed } from '../hooks/useStockFeed';
-import { useStockHistories } from '../hooks/useStockHistories';
+import { useStockFeed, Quote } from '@/hooks/useStockFeed';
+import { useStockHistories } from '@/hooks/useStockHistories';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
 
 type Props = { symbols: string[] };
 
 export default function MarketOverview({ symbols }: Props) {
-  // TOP-LEVEL HOOKS
-  const quotes = useStockFeed(symbols); // price + dp
-  const histories = useStockHistories(symbols, 60, '1'); // map of history + loading
+  const quotes = useStockFeed(symbols); // Record<string,Quote>
+  const histories = useStockHistories(symbols); // Record<string,{history,loading}>
 
   return (
     <div className='space-y-4'>
       {symbols.map((sym) => {
-        const qInfo = quotes[sym];
+        // now q is Quote | undefined
+        const q: Quote | undefined = quotes[sym];
         const { history, loading } = histories[sym];
 
-        // GUARD until both price & history exist
         if (
           loading ||
-          !qInfo ||
-          typeof qInfo.c !== 'number' ||
-          typeof qInfo.dp !== 'number' ||
-          history.length === 0
+          !q ||
+          typeof q.c !== 'number' ||
+          typeof q.dp !== 'number'
         ) {
           return (
             <div key={sym} className='bg-zinc-800 rounded-xl p-4'>
@@ -32,14 +30,13 @@ export default function MarketOverview({ symbols }: Props) {
           );
         }
 
-        const price = qInfo.c;
-        const pct = qInfo.dp;
+        const price = q.c;
+        const pct = q.dp;
         const isUp = pct >= 0;
         const color = isUp ? 'text-emerald-400' : 'text-rose-400';
 
         return (
           <div key={sym} className='bg-zinc-800 rounded-xl p-4'>
-            {/* Header */}
             <div className='flex items-baseline justify-between'>
               <div>
                 <div className='text-sm text-zinc-400'>{sym}</div>
@@ -52,8 +49,6 @@ export default function MarketOverview({ symbols }: Props) {
                 </div>
               </div>
             </div>
-
-            {/* 60-point sparkline */}
             <div className='mt-3 h-12'>
               <ResponsiveContainer width='100%' height='100%'>
                 <LineChart

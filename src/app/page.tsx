@@ -6,6 +6,7 @@ import GreekChart from '../components/GreekChart';
 import MarketOverview from '../components/MarketOverview';
 import Exposures from '../components/Exposures';
 import { usePortfolio } from '../hooks/usePortfolio';
+import StressTest from '../components/StressTest';
 
 export default function Home() {
   const { data: portfolio, loading } = usePortfolio();
@@ -26,18 +27,23 @@ export default function Home() {
       <div className='flex-1 flex flex-col'>
         <Header />
         <main className='p-4 flex-1 overflow-y-auto'>
-          <div className='grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-            {/* Left stack: P&L, VaR, Greeks */}
+          <div className='grid gap-4 sm:grid-cols-1 md:grid-cols-[2fr_1fr] lg:grid-cols-[2fr_1fr_1fr]'>
+            {/* Left stack: P&L, VaR, Greeks, Stress */}
             <div className='space-y-4'>
               <RiskSummary />
               <GreekChart portfolio={portfolio} />
+              <StressTest portfolio={portfolio} />
             </div>
 
-            {/* Middle: live stock cards */}
-            <MarketOverview symbols={symbols} />
+            {/* Middle column: Markets */}
+            <div className='space-y-4'>
+              <MarketOverview symbols={symbols} />
+            </div>
 
-            {/* Right: sortable exposures */}
-            <Exposures portfolio={portfolio} />
+            {/* Right column: Exposures */}
+            <div className='space-y-4'>
+              <Exposures portfolio={portfolio} />
+            </div>
           </div>
         </main>
       </div>
