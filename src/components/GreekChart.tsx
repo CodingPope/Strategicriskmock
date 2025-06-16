@@ -1,5 +1,5 @@
 'use client';
-import { GreekValues, useGreekFeed } from '@/hooks/useGreekFeed';
+import { useGreekFeed } from '@/hooks/useGreekFeed';
 import {
   BarChart,
   Bar,
@@ -14,7 +14,14 @@ import type { ExposureItem } from '@/app/api/portfolio/route';
 type Props = { portfolio: ExposureItem[] };
 
 export default function GreekChart({ portfolio }: Props) {
-  const greeks: GreekValues = useGreekFeed(portfolio);
+  const greeks = useGreekFeed(portfolio);
+  if (!greeks) {
+    return (
+      <div className='rounded-xl bg-zinc-800 p-6 min-w-0'>
+        <div className='text-zinc-400'>Loading Greek exposures…</div>
+      </div>
+    );
+  }
 
   const data = [
     { name: 'Delta', value: greeks.delta },

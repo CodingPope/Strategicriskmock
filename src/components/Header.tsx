@@ -1,9 +1,11 @@
 'use client';
-import { useRiskFeed } from '../hooks/useRiskFeed';
+import { usePnlFeed } from '../hooks/usePnlFeed';
+import { usePortfolio } from '../hooks/usePortfolio';
 
 export default function Header() {
-  const { data } = useRiskFeed();
-  const latest = data.at(-1);
+  const { data: portfolio } = usePortfolio();
+  const pnlSeries = usePnlFeed(portfolio);
+  const latest = pnlSeries[pnlSeries.length - 1] ?? 0;
 
   return (
     <header className='flex items-center justify-between py-4 px-6 bg-zinc-900 border-b border-zinc-700'>
@@ -11,10 +13,9 @@ export default function Header() {
       {latest && (
         <div className='text-sm'>
           <span className='text-zinc-400 mr-2'>Last P&amp;L:</span>
-          <span
-            className={latest.pnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}
-          >
-            {latest.pnl.toLocaleString()}
+          <span className={latest >= 0 ? 'text-emerald-400' : 'text-rose-400'}>
+            Last P&L:{' '}
+            {latest.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </span>
         </div>
       )}

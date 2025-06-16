@@ -1,28 +1,33 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Sidebar() {
   return (
     <aside className='bg-zinc-950 text-zinc-200 w-48 p-4 space-y-4'>
-      <h1 className='text-xl font-bold tracking-wide bg-white/50'>
+      <div className='flex items-center justify-center'>
         <Image
           src='/VasaraLogo.png'
           alt='Vasara Logo'
           width={152}
           height={152}
         />
-      </h1>
+      </div>
+
       <nav className='space-y-2'>
-        <a className='block hover:text-cyan-400' href='#'>
+        <Link href='/' className='block hover:text-cyan-400'>
           Dashboard
-        </a>
-        <a className='block hover:text-cyan-400' href='#'>
+        </Link>
+
+        {/* If you later create a dedicated exposures page, update this href */}
+        <Link href='/' className='block hover:text-cyan-400'>
           Exposures
-        </a>
-        <a className='block hover:text-cyan-400' href='#'>
+        </Link>
+
+        <Link href='/settings' className='block hover:text-cyan-400'>
           Settings
-        </a>
+        </Link>
       </nav>
     </aside>
   );

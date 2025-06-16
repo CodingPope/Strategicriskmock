@@ -1,6 +1,6 @@
 'use client';
 
-import { useStressTests, StressTestValues } from '../hooks/useStressTests';
+import { useStressTests } from '../hooks/useStressTests';
 import {
   ReferenceLine,
   XAxis,
@@ -16,7 +16,14 @@ import type { ExposureItem } from '@/app/api/portfolio/route';
 type Props = { portfolio: ExposureItem[] };
 
 export default function StressTest({ portfolio }: Props) {
-  const data: StressTestValues[] = useStressTests(portfolio);
+  const data = useStressTests(portfolio);
+  if (!data) {
+    return (
+      <div className='rounded-xl bg-zinc-800 p-6 min-w-0'>
+        <div className='text-zinc-400'>Loading stress scenarios…</div>
+      </div>
+    );
+  }
 
   return (
     <section
