@@ -20,11 +20,6 @@ export default function Sidebar() {
           Dashboard
         </Link>
 
-        {/* If you later create a dedicated exposures page, update this href */}
-        <Link href='/' className='block hover:text-cyan-400'>
-          Exposures
-        </Link>
-
         <Link href='/settings' className='block hover:text-cyan-400'>
           Settings
         </Link>
